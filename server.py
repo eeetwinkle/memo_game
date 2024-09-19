@@ -7,7 +7,8 @@ serv_sock.listen(10)
 while True:
     # Бесконечно обрабатываем входящие подключения
     client_sock, client_addr = serv_sock.accept()
-    print('Connected by', client_addr)
+    print('client connected')
+    # запуск игры (открытие всех карточек)
 
     while True:
         # Пока клиент не отключился, читаем передаваемые
@@ -16,9 +17,10 @@ while True:
         if not data:
             # Клиент отключился
             break
-        print(repr(data))
-        message = input()
-        client_sock.sendall(message.encode())
-
+        # Декодируем данные из байтов в строку
+        message = data.decode('utf-8')
+        print(message)  
+        response = input()
+        client_sock.sendall(response.encode('utf-8'))
 
     client_sock.close()

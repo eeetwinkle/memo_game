@@ -17,11 +17,12 @@ def client():
                 break
 
             # Отправляем сообщение серверу
-            client_sock.sendall(message.encode())
+            client_sock.sendall(message.encode('utf-8'))
 
             # Получаем ответ от сервера
             data = client_sock.recv(1024)
-            print('Получено:', repr(data))
+            response = data.decode('utf-8')
+            print(response)
 
     except (KeyboardInterrupt, SystemExit):
         print("Прерывание программы.")
