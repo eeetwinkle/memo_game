@@ -1129,7 +1129,7 @@ color: rgb(250,250,255);
 }</string>
     </property>
     <property name="text">
-     <string>Enemyt`s turn</string>
+     <string>Enemy`s turn</string>
     </property>
    </widget>
   </widget>

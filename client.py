@@ -106,6 +106,7 @@ class MainWindow(QMainWindow):
 
     def button_client_clicked(self, current_user):
         if self.current_user == 0 and self.press_count < 2 and self.game_active:
+            # сюда тоже можно вставить бесконечный цикл, и вместо запуска от кнопки, просто запускать его с самого начала
             button = self.sender()
             self.press_count += 1
 
