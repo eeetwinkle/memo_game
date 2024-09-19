@@ -1,5 +1,5 @@
 import socket
-
+from UI import MainWindow
 def server():
     # Создаем сокет
     serv_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, proto=0)

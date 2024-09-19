@@ -1,10 +1,12 @@
 import socket
+import sys
 
-
+from PyQt6.QtWidgets import QApplication
+from UI import MainWindow
 def client():
     # Создаем сокет
     client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_sock.connect(('172.20.10.7', 53210))
+    client_sock.connect(('10.193.146.41', 53210))
     # ненадолго перевернуть картинки
     current_user = 0
 
@@ -12,16 +14,15 @@ def client():
         while True:
             match current_user:
                 case 0:
+
                     # Запрашиваем ввод сообщения от пользователя
                     message1 = input("1 фото: ")
                     # Отправляем сообщение серверу
                     client_sock.sendall(message1.encode('utf-8'))
                     message2 = input("2 фото: ")
                     client_sock.sendall(message2.encode('utf-8'))
-                    # заблокировать все кнопки для нажатия, если неправильно
-                    # картинки открыть если правильно и продолжать отсылать
-                    # if message1.image != message2.image:
-                    #   current_user = 1
+                    if message1.image != message2.image:
+                       current_user = 1
 
                 case 1:
                     # Получаем ответ от сервера
@@ -47,3 +48,7 @@ def client():
 
 if __name__ == "__main__":
     client()
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
