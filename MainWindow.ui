@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>763</width>
-    <height>735</height>
+    <height>744</height>
    </rect>
   </property>
   <property name="font">
@@ -1069,6 +1069,68 @@ color: rgb(250,250,255);
     <attribute name="buttonGroup">
      <string notr="true">buttons</string>
     </attribute>
+   </widget>
+   <widget class="QPushButton" name="you">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>40</y>
+      <width>131</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #375;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #375;
+border-style: outset;
+background: rgb(60,150,90);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Your turn</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="not_you">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>40</y>
+      <width>121</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #721;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #721;
+border-style: outset;
+background: rgb(150,30,20);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Enemyt`s turn</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

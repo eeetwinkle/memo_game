@@ -1,10 +1,10 @@
-from PyQt6.QtWidgets import QMainWindow, QApplication
+from PyQt6.QtWidgets import QWidget, QMainWindow, QApplication
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import QSize
 from PyQt6 import uic
 import random
+
 import socket
-import threading
 
 def server():
     # Создаем сокет
@@ -92,12 +92,8 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     import sys
-    # Запуск сервера в отдельном потоке
-    server_thread = threading.Thread(target=server, daemon=True)
-    server_thread.start()
-
-    # Запуск приложения PyQt
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
+    server()
