@@ -1,26 +1,40 @@
 import socket
 
-serv_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, proto=0)
-serv_sock.bind(('', 53210))
-serv_sock.listen(10)
+def server():
+    # Создаем сокет
+    serv_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, proto=0)
+    serv_sock.bind(('', 53210))
+    serv_sock.listen(10)
 
-while True:
-    # Бесконечно обрабатываем входящие подключения
-    client_sock, client_addr = serv_sock.accept()
-    print('client connected')
-    # запуск игры (открытие всех карточек)
+    try:
+        while True:
+            # Бесконечно обрабатываем входящие подключения
+            client_sock, client_addr = serv_sock.accept()
 
-    while True:
-        # Пока клиент не отключился, читаем передаваемые
-        # им данные и отправляем их обратно
-        data = client_sock.recv(1024)
-        if not data:
-            # Клиент отключился
-            break
-        # Декодируем данные из байтов в строку
-        message = data.decode('utf-8')
-        print(message)  
-        response = input()
-        client_sock.sendall(response.encode('utf-8'))
+            print('Connected by', client_addr)
 
-    client_sock.close()
+            while True:
+                # Пока клиент не отключился, читаем передаваемые
+                # им данные и отправляем их обратно
+                data = client_sock.recv(1024)
+                if not data:
+                    # Клиент отключился
+                    break
+                print(repr(data))
+                message = input()
+                client_sock.sendall(message.encode())
+
+            client_sock.close()
+
+    except (KeyboardInterrupt, SystemExit):
+        print("Прерывание программы.")
+
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+
+    finally:
+        client_sock.close()
+
+
+if __name__ == "__main__":
+    server()
