@@ -9,20 +9,20 @@ def client():
     try:
         while True:
             # Запрашиваем ввод сообщения от пользователя
-            message = input("Введите сообщение (или 'exit' для выхода): ")
-
-            # Проверяем условие выхода
-            if message.lower() == 'exit':
-                print("Выход из программы.")
-                break
+            message1 = input("1 фото: ")
+            message2 = input("2 фото: ")
 
             # Отправляем сообщение серверу
-            client_sock.sendall(message.encode('utf-8'))
-
+            client_sock.sendall(message1.encode('utf-8'))
+            client_sock.sendall(message2.encode('utf-8'))
             # Получаем ответ от сервера
             data = client_sock.recv(1024)
-            response = data.decode('utf-8')
-            print(response)
+            response1 = data.decode('utf-8')
+            print(response1)
+            data = client_sock.recv(1024)
+            response2 = data.decode('utf-8')
+            print(response2)
+            #условие для правильных картиной
 
     except (KeyboardInterrupt, SystemExit):
         print("Прерывание программы.")

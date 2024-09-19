@@ -11,18 +11,27 @@ def server():
             # Бесконечно обрабатываем входящие подключения
             client_sock, client_addr = serv_sock.accept()
 
-            print('Connected by', client_addr)
-
+            print('client connected', client_addr)
+            # карточки ненадолго переворачиваются
             while True:
                 # Пока клиент не отключился, читаем передаваемые
                 # им данные и отправляем их обратно
                 data = client_sock.recv(1024)
-                if not data:
-                    # Клиент отключился
+                if not data: # Клиент отключился
                     break
-                print(repr(data))
-                message = input()
-                client_sock.sendall(message.encode())
+                # Декодируем данные из байтов в строку
+                message1 = data.decode('utf-8')
+                print(message1)
+                data = client_sock.recv(1024)
+                if not data:  # Клиент отключился
+                    break
+                # Декодируем данные из байтов в строку
+                message2 = data.decode('utf-8')
+                print(message2)
+                response1 = input()
+                client_sock.sendall(response1.encode('utf-8'))
+                response2 = input()
+                client_sock.sendall(response2.encode('utf-8'))
 
             client_sock.close()
 
@@ -32,8 +41,6 @@ def server():
     except Exception as e:
         print(f"Произошла ошибка: {e}")
 
-    finally:
-        client_sock.close()
 
 
 if __name__ == "__main__":
