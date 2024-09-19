@@ -1,0 +1,1091 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>763</width>
+    <height>735</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>OCR A Extended</family>
+    <pointsize>36</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background: rgb(240,240,250)
+qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(230, 230,250, 255), stop:1 rgba(140, 160, 230, 255))
+                </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="A1">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>120</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>A1</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="A2">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>120</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>A2</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="A4">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>120</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>A4</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="A3">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>120</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>A3</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="A6">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>120</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>A6</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="A5">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>120</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>A5</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>701</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>68</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(40, 60, 120);</string>
+    </property>
+    <property name="text">
+     <string>МЕМО</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="B2">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>240</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>B2</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="B6">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>240</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>B6</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="B4">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>240</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>B4</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="B5">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>240</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>B5</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="B3">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>240</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>B3</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="B1">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>240</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>B1</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="C2">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>360</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>C2</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="C6">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>360</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>C6</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="C4">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>360</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>C4</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="C5">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>360</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>C5</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="C3">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>360</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>C3</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="C1">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>360</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>C1</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="D5">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>480</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>D5</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="D1">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>480</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>D1</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="E3">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>600</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>E3</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="E4">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>600</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>E4</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="D6">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>480</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>D6</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="E2">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>600</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>E2</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="D3">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>480</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>D3</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="E6">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>600</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>E6</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="E1">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>600</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>E1</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="E5">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>600</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>E5</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="D2">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>480</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>D2</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="D4">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>480</y>
+      <width>101</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Maki-Sans</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+border: 5px solid #357;
+border-style: outset;
+}
+QPushButton:pressed {
+border: 5px solid #357;
+border-style: outset;
+background: rgb(60,90,150);
+color: rgb(250,250,255);
+}</string>
+    </property>
+    <property name="text">
+     <string>D4</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttons</string>
+    </attribute>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>763</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+ <buttongroups>
+  <buttongroup name="buttons"/>
+ </buttongroups>
+</ui>
