@@ -2,7 +2,7 @@ import socket
 import threading
 from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton
 from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import QSize
+from PyQt6.QtCore import QSize, QTimer
 from PyQt6 import uic
 import random
 
@@ -20,6 +20,8 @@ class MainWindow(QMainWindow):
         self.buttons_list = self.buttons.buttons()
         self.current_user = current_user  # 0 - клиент, 1 - сервер
         self.press_count = 0  # Количество нажатий
+        self.prev_image = ''
+        self.prev_button = ''
 
         for button in self.buttons_list:
             button.setIcon(QIcon('pictures/back.jpg'))
@@ -33,23 +35,49 @@ class MainWindow(QMainWindow):
                                         background: rgb(60,150,90);
                                         color: rgb(250,250,255);
                                         }""")
-        self.game_active = True  # Игра активна для клиента
+
         #threading.Thread(target=self.listen_to_server, daemon=True).start()
 
     def button_client_clicked(self):
-        if self.game_active:  # Если ход клиента и игра активна
-            button = self.sender()
+        button = self.sender()
 
-            # Отправляем информацию о кнопке на сервер
-            button_info = f"{button.objectName()}"
-            self.client_sock.sendall(button_info.encode('utf-8'))
+        # Отправляем информацию о кнопке на сервер
+        button_info = f"{button.objectName()}"
+        self.client_sock.sendall(button_info.encode('utf-8'))
 
-            # Получаем путь к изображению от сервера и отображаем его
-            data = self.client_sock.recv(1024)
-            picture = data.decode('utf-8')
-            print(picture)
-            button.setIcon(QIcon(picture))
-            button.setIconSize(QSize(button.width() - 8, button.height() - 8))
+        # Получаем путь к изображению от сервера и отображаем его
+        data = self.client_sock.recv(1024)
+        picture = data.decode('utf-8')
+        button.setIcon(QIcon(picture))
+        button.setIconSize(QSize(button.width() - 8, button.height() - 8))
+        if self.press_count == 0:
+            self.prev_image = picture
+            self.prev_button = button
+            self.press_count += 1
+        else:
+            if self.prev_image != picture:
+                for btn in self.buttons_list:
+                    btn.setEnabled(False)
+                QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_button, button))
+
+            else:
+                self.prev_button.setStyleSheet("""QPushButton {
+                                                        border: 5px solid #375;
+                                                        border-style: outset;
+                                                        color: black;
+                                                        }""")
+                button.setStyleSheet("""QPushButton {
+                                                border: 5px solid #375;
+                                                border-style: outset;
+                                                color: black;
+                                                }""")
+            self.press_count = 0
+
+    def lock_pictures(self, prev_button, current_button):
+        prev_button.setIcon(QIcon('pictures/back.jpg'))
+        current_button.setIcon(QIcon('pictures/back.jpg'))
+
+
 
 
 if __name__ == '__main__':
