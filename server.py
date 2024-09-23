@@ -2,7 +2,7 @@ import socket
 import threading
 from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton
 from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import QSize
+from PyQt6.QtCore import QSize, QTimer
 from PyQt6 import uic
 import random
 
@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
                 button.setIconSize(QSize(button.width() - 8, button.height() - 8))
                 button.setProperty('picture', pictures[i])
                 button.clicked.connect(self.button_server_clicked)
-                #button.setEnabled(True)
+                button.setEnabled(False)
         self.enemys_turn.setStyleSheet("""QPushButton{
                                     border: 5px solid #721;
                                     border-style: outset;
@@ -48,23 +48,34 @@ class MainWindow(QMainWindow):
         self.client_sock, self.client_addr = self.server_sock.accept()
         print('Client connected', self.client_addr)
 
-        self.game_active = True  # Игра активна для клиента
+        self.stop_event = threading.Event()  # Создаем событие для остановки потока
         threading.Thread(target=self.handle_client, daemon=True).start()
+
+        self.press_count = 0  # Количество нажатий
+        self.prev_image = ''
+        self.prev_button = ''
 
     def handle_client(self):
         try:
-            while True:
+            while not self.stop_event.is_set():
                 # Получаем информацию о нажатии кнопки от клиента
                 data = self.client_sock.recv(1024)
                 if not data:
                     break
-                button_name = data.decode('utf-8')
+                message = data.decode('utf-8')
+                print(message)
+                if message == 'end':
+                    self.stop_tread()
+                    break
+                button_name, special_simbol = message.split('|')
+                print(button_name, special_simbol)
                 button = self.findChild(QPushButton, button_name)
                 # Генерируем путь к изображению
                 picture_path = button.property('picture')
+                picture_info = f'{button_name}|{picture_path}'
 
                 # Отправляем информацию клиенту для синхронного открытия
-                self.client_sock.sendall(picture_path.encode('utf-8'))
+                self.client_sock.sendall(picture_info.encode('utf-8'))
 
                 # Сервер также обновляет свою версию интерфейса
                 print(f"Button {button_name} pressed, displaying picture {picture_path}")
@@ -72,21 +83,61 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             print(f"An error occurred: {e}")
-        finally:
-            self.client_sock.close()  # Закрываем соединение
+
+
+    def start_tread(self):
+        if self.thread is None or not self.thread.is_alive():  # Проверяем, не запущен ли поток
+            self.stop_event.clear()  # Сбрасываем событие
+            self.thread = threading.Thread(target=self.handle_client, daemon=True)
+            self.thread.start()  # Запускаем новый поток
+            print("Поток запущен.")
+
+    def stop_tread(self):
+        if self.thread is not None:
+            self.stop_event.set()  # Устанавливаем событие для остановки потока
+            self.thread = None  # Обнуляем ссылку на поток
+            print("Поток остановлен.")
+            for btn in self.buttons_list:
+                btn.setEnabled(True)
 
     def button_server_clicked(self):
         button = self.sender()
         picture = button.property('picture')
 
         # Отправляем информацию о кнопке на сервер
-        button_info = button.objectName()
+        button_info = f'{button.objectName()}|{picture}'
         self.client_sock.sendall(button_info.encode('utf-8'))
-        picture_info = button.property('picture')
-        self.client_sock.sendall(picture_info.encode('utf-8'))
 
         button.setIcon(QIcon(picture))
         button.setIconSize(QSize(button.width() - 8, button.height() - 8))
+        if self.press_count == 0:
+            self.prev_image = picture
+            self.prev_button = button
+            self.press_count += 1
+        else:
+            if self.prev_image != picture:
+                for btn in self.buttons_list:
+                    btn.setEnabled(False)
+                self.client_sock.sendall('end'.encode('utf-8'))
+                self.start_tread()
+                QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_button, button))
+
+            else:
+                self.prev_button.setStyleSheet("""QPushButton {
+                                                                  border: 5px solid #375;
+                                                                  border-style: outset;
+                                                                  color: black;
+                                                                  }""")
+                button.setStyleSheet("""QPushButton {
+                                                          border: 5px solid #375;
+                                                          border-style: outset;
+                                                          color: black;
+                                                          }""")
+            self.press_count = 0
+
+    def lock_pictures(self, prev_button, current_button):
+        prev_button.setIcon(QIcon('pictures/back.jpg'))
+        current_button.setIcon(QIcon('pictures/back.jpg'))
 
     def update_server_interface(self, button_name, picture_path):
         button = self.findChild(QPushButton, button_name)
