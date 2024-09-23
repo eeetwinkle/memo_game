@@ -18,7 +18,6 @@ class MainWindow(QMainWindow):
         self.client_sock.connect(('127.0.0.1', 53210))  # Укажите IP сервера
 
         self.buttons_list = self.buttons.buttons()
-        self.current_user = current_user  # 0 - клиент, 1 - сервер
         self.press_count = 0  # Количество нажатий
         self.prev_image = ''
         self.prev_button = ''
@@ -88,6 +87,8 @@ class MainWindow(QMainWindow):
                 message = data.decode('utf-8')
                 print(message)
                 if message == 'end':
+                    QTimer.singleShot(3000, lambda: self.lock_pictures(self.current_button_server,
+                                                                       self.prev_button_server))
                     self.stop_tread()
                     break
                 if not data:
@@ -97,9 +98,6 @@ class MainWindow(QMainWindow):
                 print(f"Button {button_name} pressed, displaying picture {picture}")
 
                 button.setIcon(QIcon(picture))
-
-                # Сервер также обновляет свою версию интерфейса
-                #print(f"Button {button_name} pressed, displaying picture {picture}")
 
         except Exception as e:
             print(f"An error occurred: {e}")

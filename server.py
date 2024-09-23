@@ -14,8 +14,10 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('pictures/icon.png'))
 
         self.buttons_list = self.buttons.buttons()
-        self.current_user = current_user  # 0 - клиент, 1 - сервер
         self.press_count = 0  # Количество нажатий
+        self.press_count_client = 0
+        self.prev_image = ''
+        self.prev_button = ''
 
         # Присваиваем кнопкам случайные картинки
         pictures = [f'pictures/{i + 1}.jpg' for i in range(15)]
@@ -51,9 +53,6 @@ class MainWindow(QMainWindow):
         self.stop_event = threading.Event()  # Создаем событие для остановки потока
         threading.Thread(target=self.handle_client, daemon=True).start()
 
-        self.press_count = 0  # Количество нажатий
-        self.prev_image = ''
-        self.prev_button = ''
 
     def handle_client(self):
         try:
