@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
                                         background: rgb(60,150,90);
                                         color: rgb(250,250,255);
                                         }""")
-
+        self.game_active = True  # Игра активна для клиента
         #threading.Thread(target=self.listen_to_server, daemon=True).start()
 
     def button_client_clicked(self):
@@ -79,6 +79,30 @@ class MainWindow(QMainWindow):
 
 
 
+    def handle_server(self):
+        try:
+            while True:
+                # Получаем информацию о нажатии кнопки от клиента
+                data = self.client_sock.recv(1024)
+                if not data:
+                    break
+                button_name = data.decode('utf-8')
+                data = self.client_sock.recv(1024)
+                if not data:
+                    break
+                picture = data.decode('utf-8')
+                button = self.findChild(QPushButton, button_name)
+                print(f"Button {button_name} pressed, displaying picture {picture}")
+
+                button.setIcon(QIcon(picture))
+
+                # Сервер также обновляет свою версию интерфейса
+                #print(f"Button {button_name} pressed, displaying picture {picture}")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        finally:
+            self.client_sock.close()  # Закрываем соединение
 
 if __name__ == '__main__':
     import sys

@@ -30,7 +30,8 @@ class MainWindow(QMainWindow):
                 print(button.objectName(), pictures[i])
                 button.setIconSize(QSize(button.width() - 8, button.height() - 8))
                 button.setProperty('picture', pictures[i])
-                # button.clicked.connect(self.button_clicked)
+                button.clicked.connect(self.button_server_clicked)
+                #button.setEnabled(True)
         self.enemys_turn.setStyleSheet("""QPushButton{
                                     border: 5px solid #721;
                                     border-style: outset;
@@ -73,6 +74,19 @@ class MainWindow(QMainWindow):
             print(f"An error occurred: {e}")
         finally:
             self.client_sock.close()  # Закрываем соединение
+
+    def button_server_clicked(self):
+        button = self.sender()
+        picture = button.property('picture')
+
+        # Отправляем информацию о кнопке на сервер
+        button_info = button.objectName()
+        self.client_sock.sendall(button_info.encode('utf-8'))
+        picture_info = button.property('picture')
+        self.client_sock.sendall(picture_info.encode('utf-8'))
+
+        button.setIcon(QIcon(picture))
+        button.setIconSize(QSize(button.width() - 8, button.height() - 8))
 
     def update_server_interface(self, button_name, picture_path):
         button = self.findChild(QPushButton, button_name)

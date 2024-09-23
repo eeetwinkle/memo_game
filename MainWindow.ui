@@ -1089,6 +1089,7 @@ color: rgb(250,250,255);
      <string notr="true">QPushButton {
 border: 5px solid #375;
 border-style: outset;
+color: black;
 }</string>
     </property>
     <property name="text">
@@ -1114,6 +1115,7 @@ border-style: outset;
      <string notr="true">QPushButton {
 border: 5px solid #832;
 border-style: outset;
+color: black;
 }</string>
     </property>
     <property name="text">
