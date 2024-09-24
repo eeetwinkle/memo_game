@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('pictures/icon.png'))
 
         self.buttons_list = self.buttons.buttons()
+        # Счетчики для проверки выигрышных ходов
         self.press_count = 0
         self.prev_image = ''
         self.prev_button = ''
@@ -27,6 +28,7 @@ class MainWindow(QMainWindow):
         self.buttons = self.buttons.buttons()
         random.shuffle(pictures)
         random.shuffle(self.buttons)
+        # Выставляем картинки парами
         for i in range(15):
             for k in range(2):
                 button = self.buttons[i * 2 + k]
@@ -40,6 +42,7 @@ class MainWindow(QMainWindow):
                 button.clicked.connect(self.button_server_clicked)
                 button.setEnabled(False)
 
+        # Сейчас ход противника
         self.enemys_turn.setStyleSheet("""QPushButton{
                                     border: 5px solid #721;
                                     border-style: outset;
@@ -47,7 +50,7 @@ class MainWindow(QMainWindow):
                                     color: rgb(250,250,255);
                                     }""")
 
-
+        # Открываем сокет для отправки и приема
         self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_sock.bind(('', 53211))
         self.server_sock.listen(1)
@@ -56,13 +59,14 @@ class MainWindow(QMainWindow):
         self.client_sock, self.client_addr = self.server_sock.accept()
         print('Client connected', self.client_addr)
 
+        # Открываем поток для прослушивания ходов противника
         self.stop_event = threading.Event()
         threading.Thread(target=self.handle_client, daemon=True).start()
 
     def handle_client(self):
         try:
+            # Принимаем данные от клиента до тех пор, пока не произойдет событие для выхода
             while not self.stop_event.is_set():
-
                 data = self.client_sock.recv(1024)
                 if not data:
                     break
@@ -72,17 +76,14 @@ class MainWindow(QMainWindow):
                     self.stop_tread()
                     break
                 button_name, special_simbol = message.split('|')
-                print(button_name, special_simbol)
+                # Смотрим картинку у кнопки из запроса клиента
                 button = self.findChild(QPushButton, button_name)
-
                 picture = button.property('picture')
                 picture_info = f'{button_name}|{picture}'
-
                 self.client_sock.sendall(picture_info.encode('utf-8'))
 
-                print(f"Button {button_name} pressed, displaying picture {picture}")
                 self.update_server_interface(button_name, picture)
-
+                # Проверяем ход противника на наличие выигрыша
                 if self.enemy_press_count == 0:
                     self.prev_enemy_button = button
                     self.prev_enemy_image = picture
@@ -102,14 +103,13 @@ class MainWindow(QMainWindow):
                                                        border: 5px solid #357;
                                                        border-style: outset;
                                                        }""")
-                        #QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_enemy_button, button))
-                        print("закрыто")
                     else:
                         self.prev_enemy_button.setStyleSheet("""QPushButton {
                                                                                 border: 5px solid #832;
                                                                                 border-style: outset;
                                                                                 color: black;
                                                                                 }""")
+                        # После удачного хода кнопки не вызывают никакую функцию
                         self.prev_enemy_button.disconnect()
                         button.setStyleSheet("""QPushButton {
                                                                 border: 5px solid #832;
@@ -123,6 +123,7 @@ class MainWindow(QMainWindow):
             print(f"An error occurred: {e}")
 
     def start_tread(self):
+        # Запускаем поток
         if self.thread is None or not self.thread.is_alive():
             self.stop_event.clear()
             self.thread = threading.Thread(target=self.handle_client, daemon=True)
@@ -138,13 +139,14 @@ class MainWindow(QMainWindow):
                                                     border-style: outset;
                                                     color: black;
                                                     }""")
-            print("Поток запущен.")
+            #print("Поток запущен.")
 
     def stop_tread(self):
+        # Завершаем поток
         if self.thread is not None:
             self.stop_event.set()
             self.thread = None
-            print("Поток остановлен.")
+            #print("Поток остановлен.")
             self.enemys_turn.setStyleSheet("""QPushButton {
                                                     border: 5px solid #832;
                                                     border-style: outset;
@@ -165,9 +167,9 @@ class MainWindow(QMainWindow):
 
         button_info = f'{button.objectName()}|{picture}'
         self.client_sock.sendall(button_info.encode('utf-8'))
-
         button.setIcon(QIcon(picture))
-        button.setIconSize(QSize(button.width() - 8, button.height() - 8))
+
+        # Если ход четный, то проверяемм условие выигрышности
         if self.press_count == 0:
             self.prev_image = picture
             self.prev_button = button
@@ -177,9 +179,10 @@ class MainWindow(QMainWindow):
                 for btn in self.buttons_list:
                     btn.setEnabled(False)
                 self.client_sock.sendall('end'.encode('utf-8'))
+                # Запускаем поток приема информации
                 self.start_tread()
+                # Закрываем карточки
                 QTimer.singleShot(1000, lambda: self.lock_pictures(self.prev_button, button))
-
             else:
                 self.prev_button.setStyleSheet("""QPushButton {
                                                                   border: 5px solid #375;

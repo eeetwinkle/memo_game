@@ -14,10 +14,12 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Мемо - игра для вас и ваших друзей")
         self.setWindowIcon(QIcon('pictures/icon.png'))
 
+        # Открываем сокет для приема и отправки сообщений
         self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_sock.connect(('127.0.0.1', 53211))
 
         self.buttons_list = self.buttons.buttons()
+        # Счетчики для проверки выигрышных ходов
         self.press_count = 0
         self.prev_image = ''
         self.prev_button = ''
@@ -25,12 +27,14 @@ class MainWindow(QMainWindow):
         self.prev_enemy_image = ''
         self.prev_enemy_button = ''
 
+        # Ставим начальные картинки на все кнопки
         for button in self.buttons_list:
             button.setIcon(QIcon('pictures/back.jpg'))
             button.setText('')
             button.setIconSize(QSize(button.width() - 8, button.height() - 8))
             button.clicked.connect(self.button_client_clicked)
 
+        # Сейчас наш ход
         self.your_turn.setStyleSheet("""QPushButton{
                                         border: 5px solid #375;
                                         border-style: outset;
@@ -38,6 +42,8 @@ class MainWindow(QMainWindow):
                                         color: rgb(250,250,255);
                                         }""")
 
+
+        # Задаем условие выхода из потока для приема ходов противника
         self.stop_event = threading.Event()
         self.thread = None
 
@@ -51,7 +57,7 @@ class MainWindow(QMainWindow):
             data = self.client_sock.recv(1024)
             btn, picture = data.decode('utf-8').split('|')
             button.setIcon(QIcon(picture))
-            button.setIconSize(QSize(button.width() - 8, button.height() - 8))
+            # Если ход четный, то проверяемм условие выигрышности
             if self.press_count == 0:
                 self.prev_image = picture
                 self.prev_button = button
@@ -61,9 +67,10 @@ class MainWindow(QMainWindow):
                     for btn in self.buttons_list:
                         btn.setEnabled(False)
                     self.client_sock.sendall('end'.encode('utf-8'))
+                    # Запускаем поток приема информации
                     self.start_tread()
+                    # Закрываем карточки
                     QTimer.singleShot(1000, lambda: self.lock_pictures(self.prev_button, button))
-
                 else:
                     self.prev_button.setStyleSheet("""QPushButton {
                                                             border: 5px solid #375;
@@ -119,14 +126,13 @@ class MainWindow(QMainWindow):
                                                                                border: 5px solid #357;
                                                                                border-style: outset;
                                                                                }""")
-                        #QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_enemy_button, button))
-                        print("закрыто")
                     else:
                         self.prev_enemy_button.setStyleSheet("""QPushButton {
                                                                                 border: 5px solid #832;
                                                                                 border-style: outset;
                                                                                 color: black;
                                                                                 }""")
+                        # После удачного хода кнопки не вызывают никакую функцию
                         self.prev_enemy_button.disconnect()
                         button.setStyleSheet("""QPushButton {
                                                                 border: 5px solid #832;
@@ -135,8 +141,6 @@ class MainWindow(QMainWindow):
                                                                 }""")
                         button.disconnect()
                     self.enemy_press_count = 0
-
-
 
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -147,6 +151,7 @@ class MainWindow(QMainWindow):
 
 
     def start_tread(self):
+        # Запускаем поток
         if self.thread is None or not self.thread.is_alive():
             self.stop_event.clear()
             self.thread = threading.Thread(target=self.handle_server, daemon=True)
@@ -162,13 +167,14 @@ class MainWindow(QMainWindow):
                                                     border-style: outset;
                                                     color: black;
                                                     }""")
-            print("Поток запущен.")
+            #print("Поток запущен.")
 
     def stop_tread(self):
+        # Завершаем поток
         if self.thread is not None:
             self.stop_event.set()
             self.thread = None
-            print("Поток остановлен.")
+            #print("Поток остановлен.")
             self.enemys_turn.setStyleSheet("""QPushButton {
                                                     border: 5px solid #832;
                                                     border-style: outset;
