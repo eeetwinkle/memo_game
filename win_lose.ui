@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>300</height>
+    <height>280</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@ qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(254, 255,253, 25
      <x>0</x>
      <y>0</y>
      <width>641</width>
-     <height>211</height>
+     <height>171</height>
     </rect>
    </property>
    <property name="font">
@@ -46,7 +46,7 @@ qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(254, 255,253, 25
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>220</y>
+     <y>180</y>
      <width>621</width>
      <height>101</height>
     </rect>
@@ -61,6 +61,7 @@ qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(254, 255,253, 25
     <string notr="true">QPushButton {
 border: 5px solid #357;
 border-style: outset;
+color: black;
 }
 QPushButton:pressed {
 border: 5px solid #357;
