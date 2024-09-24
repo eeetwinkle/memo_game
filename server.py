@@ -21,6 +21,8 @@ class MainWindow(QMainWindow):
         self.enemy_press_count = 0
         self.prev_enemy_image = ''
         self.prev_enemy_button = ''
+        self.my_score = 0
+        self.opponent_score = 0
 
         # Присваиваем кнопкам случайные картинки
         pictures = [f'pictures/{i + 1}.jpg' for i in range(15)]
@@ -105,6 +107,8 @@ class MainWindow(QMainWindow):
                         #QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_enemy_button, button))
                         print("закрыто")
                     else:
+                        self.opponent_score += 1
+                        self.score.setText(str(self.my_score) + ":" + str(self.opponent_score))
                         self.prev_enemy_button.setStyleSheet("""QPushButton {
                                                                                 border: 5px solid #832;
                                                                                 border-style: outset;
@@ -181,6 +185,8 @@ class MainWindow(QMainWindow):
                 QTimer.singleShot(1000, lambda: self.lock_pictures(self.prev_button, button))
 
             else:
+                self.my_score += 1
+                self.score.setText(str(self.my_score) + ":" + str(self.opponent_score))
                 self.prev_button.setStyleSheet("""QPushButton {
                                                                   border: 5px solid #375;
                                                                   border-style: outset;

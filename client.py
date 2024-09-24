@@ -24,6 +24,8 @@ class MainWindow(QMainWindow):
         self.enemy_press_count = 0
         self.prev_enemy_image = ''
         self.prev_enemy_button = ''
+        self.my_score = 0
+        self.opponent_score = 0
 
         for button in self.buttons_list:
             button.setIcon(QIcon('pictures/back.jpg'))
@@ -65,6 +67,8 @@ class MainWindow(QMainWindow):
                     QTimer.singleShot(1000, lambda: self.lock_pictures(self.prev_button, button))
 
                 else:
+                    self.my_score += 1
+                    self.score.setText(str(self.my_score) + ":" + str(self.opponent_score))
                     self.prev_button.setStyleSheet("""QPushButton {
                                                             border: 5px solid #375;
                                                             border-style: outset;
@@ -111,17 +115,19 @@ class MainWindow(QMainWindow):
                         time.sleep(1)
                         self.prev_enemy_button.setIcon(QIcon('pictures/back.jpg'))
                         self.prev_enemy_button.setStyleSheet("""QPushButton {
-                                                                                                border: 5px solid #357;
-                                                                                                border-style: outset;
-                                                                                                }""")
+                                                                      order: 5px solid #357;
+                                                                      border-style: outset;
+                                                                      }""")
                         button.setIcon(QIcon('pictures/back.jpg'))
                         button.setStyleSheet("""QPushButton {
-                                                                               border: 5px solid #357;
-                                                                               border-style: outset;
-                                                                               }""")
+                                                    border: 5px solid #357;
+                                                    border-style: outset;
+                                                    }""")
                         #QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_enemy_button, button))
                         print("закрыто")
                     else:
+                        self.opponent_score += 1
+                        self.score.setText(str(self.my_score) + ":" + str(self.opponent_score))
                         self.prev_enemy_button.setStyleSheet("""QPushButton {
                                                                                 border: 5px solid #832;
                                                                                 border-style: outset;
