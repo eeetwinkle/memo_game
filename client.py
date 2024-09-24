@@ -99,7 +99,7 @@ class MainWindow(QMainWindow):
                 # Получаем информацию о нажатии кнопки от клиента
                 data = self.client_sock.recv(1024)
                 message = data.decode('utf-8')
-                print(message)
+                #print(message)
                 if message == 'end':
                     self.stop_tread()
                     break
@@ -107,13 +107,13 @@ class MainWindow(QMainWindow):
                     break
                 button_name, picture = message.split('|')
                 button = self.findChild(QPushButton, button_name)
-                print(f"Button {button_name} pressed, displaying picture {picture}")
+                #print(f"Button {button_name} pressed, displaying picture {picture}")
                 button.setIcon(QIcon(picture))
                 button.setStyleSheet("""QPushButton {
-                                                        border: 5px solid #832;
-                                                        border-style: outset;
-                                                        color: black;
-                                                        }""")
+                                                    border: 5px solid #832;
+                                                    border-style: outset;
+                                                    color: black;
+                                                    }""")
                 if self.enemy_press_count == 0:
                     self.prev_enemy_button = button
                     self.prev_enemy_image = picture
@@ -125,14 +125,14 @@ class MainWindow(QMainWindow):
                         time.sleep(1)
                         self.prev_enemy_button.setIcon(QIcon('pictures/back.jpg'))
                         self.prev_enemy_button.setStyleSheet("""QPushButton {
-                                                                      order: 5px solid #357;
+                                                                      border: 5px solid #357;
                                                                       border-style: outset;
                                                                       }""")
                         button.setIcon(QIcon('pictures/back.jpg'))
                         button.setStyleSheet("""QPushButton {
-                                                                               border: 5px solid #357;
-                                                                               border-style: outset;
-                                                                               }""")
+                                                                       border: 5px solid #357;
+                                                                       border-style: outset;
+                                                                       }""")
                     else:
                         self.opponent_score += 1
                         self.score.setText(str(self.my_score) + ":" + str(self.opponent_score))

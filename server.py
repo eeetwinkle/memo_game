@@ -56,10 +56,10 @@ class MainWindow(QMainWindow):
         self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_sock.bind(('', 53211))
         self.server_sock.listen(1)
-        print('Server is running')
+        #print('Server is running')
 
         self.client_sock, self.client_addr = self.server_sock.accept()
-        print('Client connected', self.client_addr)
+        #print('Client connected', self.client_addr)
 
         # Открываем поток для прослушивания ходов противника
         self.stop_event = threading.Event()
@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
                 if not data:
                     break
                 message = data.decode('utf-8')
-                print(message)
+                #print(message)
                 if message == 'end':
                     self.stop_tread()
                     break
