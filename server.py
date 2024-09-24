@@ -5,6 +5,7 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import QSize, QTimer
 from PyQt6 import uic
 import random
+import time
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -15,9 +16,11 @@ class MainWindow(QMainWindow):
 
         self.buttons_list = self.buttons.buttons()
         self.press_count = 0
-        self.press_count_client = 0
         self.prev_image = ''
         self.prev_button = ''
+        self.enemy_press_count = 0
+        self.prev_enemy_image = ''
+        self.prev_enemy_button = ''
 
         # Присваиваем кнопкам случайные картинки
         pictures = [f'pictures/{i + 1}.jpg' for i in range(15)]
@@ -75,13 +78,41 @@ class MainWindow(QMainWindow):
                 print(button_name, special_simbol)
                 button = self.findChild(QPushButton, button_name)
 
-                picture_path = button.property('picture')
-                picture_info = f'{button_name}|{picture_path}'
+                picture = button.property('picture')
+                picture_info = f'{button_name}|{picture}'
 
                 self.client_sock.sendall(picture_info.encode('utf-8'))
 
-                print(f"Button {button_name} pressed, displaying picture {picture_path}")
-                self.update_server_interface(button_name, picture_path)
+                print(f"Button {button_name} pressed, displaying picture {picture}")
+                self.update_server_interface(button_name, picture)
+
+                if self.enemy_press_count == 0:
+                    self.prev_enemy_button = button
+                    self.prev_enemy_image = picture
+                    self.enemy_press_count += 1
+                else:
+                    if self.prev_enemy_image != picture:
+                        for btn in self.buttons_list:
+                            btn.setEnabled(False)
+                        time.sleep(1)
+                        self.prev_enemy_button.setIcon(QIcon('pictures/back.jpg'))
+                        button.setIcon(QIcon('pictures/back.jpg'))
+                        #QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_enemy_button, button))
+                        print("закрыто")
+                    else:
+                        self.prev_enemy_button.setStyleSheet("""QPushButton {
+                                                                                border: 5px solid #832;
+                                                                                border-style: outset;
+                                                                                color: black;
+                                                                                }""")
+                        self.prev_enemy_button.disconnect()
+                        button.setStyleSheet("""QPushButton {
+                                                                border: 5px solid #832;
+                                                                border-style: outset;
+                                                                color: black;
+                                                                }""")
+                        button.disconnect()
+                    self.enemy_press_count = 0
 
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -143,7 +174,7 @@ class MainWindow(QMainWindow):
                     btn.setEnabled(False)
                 self.client_sock.sendall('end'.encode('utf-8'))
                 self.start_tread()
-                QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_button, button))
+                QTimer.singleShot(1000, lambda: self.lock_pictures(self.prev_button, button))
 
             else:
                 self.prev_button.setStyleSheet("""QPushButton {
@@ -151,11 +182,13 @@ class MainWindow(QMainWindow):
                                                                   border-style: outset;
                                                                   color: black;
                                                                   }""")
+                self.prev_button.disconnect()
                 button.setStyleSheet("""QPushButton {
                                                           border: 5px solid #375;
                                                           border-style: outset;
                                                           color: black;
                                                           }""")
+                button.disconnect()
             self.press_count = 0
 
     def lock_pictures(self, prev_button, current_button):
