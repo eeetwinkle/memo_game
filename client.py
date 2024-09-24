@@ -7,18 +7,17 @@ from PyQt6 import uic
 import random
 
 class MainWindow(QMainWindow):
-    def __init__(self, current_user):
+    def __init__(self):
         super().__init__()
         uic.loadUi('MainWindow.ui', self)
         self.setWindowTitle("Мемо - игра для вас и ваших друзей")
         self.setWindowIcon(QIcon('pictures/icon.png'))
 
-        # Подключение к серверу
         self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_sock.connect(('127.0.0.1', 53210))  # Укажите IP сервера
+        self.client_sock.connect(('127.0.0.1', 53210))
 
         self.buttons_list = self.buttons.buttons()
-        self.press_count = 0  # Количество нажатий
+        self.press_count = 0
         self.prev_image = ''
         self.prev_button = ''
 
@@ -35,8 +34,8 @@ class MainWindow(QMainWindow):
                                         color: rgb(250,250,255);
                                         }""")
 
-        self.stop_event = threading.Event()  # Создаем событие для остановки потока
-        self.thread = None  # Изначально поток не создан
+        self.stop_event = threading.Event()
+        self.thread = None
 
     def button_client_clicked(self):
             button = self.sender()
@@ -45,7 +44,6 @@ class MainWindow(QMainWindow):
             button_info = f"{button.objectName()}|?"
             self.client_sock.sendall(button_info.encode('utf-8'))
 
-            # Получаем путь к изображению от сервера и отображаем его
             data = self.client_sock.recv(1024)
             btn, picture = data.decode('utf-8').split('|')
             button.setIcon(QIcon(picture))
@@ -104,16 +102,16 @@ class MainWindow(QMainWindow):
 
 
     def start_tread(self):
-        if self.thread is None or not self.thread.is_alive():  # Проверяем, не запущен ли поток
-            self.stop_event.clear()  # Сбрасываем событие
+        if self.thread is None or not self.thread.is_alive():
+            self.stop_event.clear()
             self.thread = threading.Thread(target=self.handle_server, daemon=True)
-            self.thread.start()  # Запускаем новый поток
+            self.thread.start()
             print("Поток запущен.")
 
     def stop_tread(self):
         if self.thread is not None:
-            self.stop_event.set()  # Устанавливаем событие для остановки потока
-            self.thread = None  # Обнуляем ссылку на поток
+            self.stop_event.set()
+            self.thread = None
             print("Поток остановлен.")
             for btn in self.buttons_list:
                 btn.setEnabled(True)
@@ -121,6 +119,6 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    window = MainWindow(0)  # 0 означает, что клиент ходит первым
+    window = MainWindow()
     window.show()
     sys.exit(app.exec())

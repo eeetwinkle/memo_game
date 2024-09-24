@@ -7,14 +7,14 @@ from PyQt6 import uic
 import random
 
 class MainWindow(QMainWindow):
-    def __init__(self, current_user):
+    def __init__(self):
         super().__init__()
         uic.loadUi('MainWindow.ui', self)
         self.setWindowTitle("Мемо - игра для вас и ваших друзей")
         self.setWindowIcon(QIcon('pictures/icon.png'))
 
         self.buttons_list = self.buttons.buttons()
-        self.press_count = 0  # Количество нажатий
+        self.press_count = 0
         self.press_count_client = 0
         self.prev_image = ''
         self.prev_button = ''
@@ -50,23 +50,23 @@ class MainWindow(QMainWindow):
                                     color: rgb(250,250,255);
                                     }""")
 
-        # Подключение к серверу
+
         self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_sock.bind(('', 53210))  # Укажите IP сервера, если нужно
+        self.server_sock.bind(('', 53210))
         self.server_sock.listen(1)
         print('Server is running')
 
         self.client_sock, self.client_addr = self.server_sock.accept()
         print('Client connected', self.client_addr)
 
-        self.stop_event = threading.Event()  # Создаем событие для остановки потока
+        self.stop_event = threading.Event()
         threading.Thread(target=self.handle_client, daemon=True).start()
 
 
     def handle_client(self):
         try:
             while not self.stop_event.is_set():
-                # Получаем информацию о нажатии кнопки от клиента
+
                 data = self.client_sock.recv(1024)
                 if not data:
                     break
@@ -78,14 +78,12 @@ class MainWindow(QMainWindow):
                 button_name, special_simbol = message.split('|')
                 print(button_name, special_simbol)
                 button = self.findChild(QPushButton, button_name)
-                # Генерируем путь к изображению
+
                 picture_path = button.property('picture')
                 picture_info = f'{button_name}|{picture_path}'
 
-                # Отправляем информацию клиенту для синхронного открытия
                 self.client_sock.sendall(picture_info.encode('utf-8'))
 
-                # Сервер также обновляет свою версию интерфейса
                 print(f"Button {button_name} pressed, displaying picture {picture_path}")
                 self.update_server_interface(button_name, picture_path)
 
@@ -94,16 +92,16 @@ class MainWindow(QMainWindow):
 
 
     def start_tread(self):
-        if self.thread is None or not self.thread.is_alive():  # Проверяем, не запущен ли поток
-            self.stop_event.clear()  # Сбрасываем событие
+        if self.thread is None or not self.thread.is_alive():
+            self.stop_event.clear()
             self.thread = threading.Thread(target=self.handle_client, daemon=True)
-            self.thread.start()  # Запускаем новый поток
+            self.thread.start()
             print("Поток запущен.")
 
     def stop_tread(self):
         if self.thread is not None:
-            self.stop_event.set()  # Устанавливаем событие для остановки потока
-            self.thread = None  # Обнуляем ссылку на поток
+            self.stop_event.set()
+            self.thread = None
             print("Поток остановлен.")
             for btn in self.buttons_list:
                 btn.setEnabled(True)
@@ -112,7 +110,6 @@ class MainWindow(QMainWindow):
         button = self.sender()
         picture = button.property('picture')
 
-        # Отправляем информацию о кнопке на сервер
         button_info = f'{button.objectName()}|{picture}'
         self.client_sock.sendall(button_info.encode('utf-8'))
 
@@ -154,7 +151,7 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    window = MainWindow(0)  # 0 означает, что клиент ходит первым
+    window = MainWindow()
     window.show()
     sys.exit(app.exec())
 
