@@ -106,6 +106,17 @@ class MainWindow(QMainWindow):
             self.stop_event.clear()
             self.thread = threading.Thread(target=self.handle_server, daemon=True)
             self.thread.start()
+            self.enemys_turn.setStyleSheet("""QPushButton{
+                                                    border: 5px solid #721;
+                                                    border-style: outset;
+                                                    background: rgb(180,50,40);
+                                                    color: rgb(250,250,255);
+                                                    }""")
+            self.your_turn.setStyleSheet("""QPushButton {
+                                                    border: 5px solid #375;
+                                                    border-style: outset;
+                                                    color: black;
+                                                    }""")
             print("Поток запущен.")
 
     def stop_tread(self):
@@ -113,6 +124,17 @@ class MainWindow(QMainWindow):
             self.stop_event.set()
             self.thread = None
             print("Поток остановлен.")
+            self.enemys_turn.setStyleSheet("""QPushButton {
+                                                    border: 5px solid #832;
+                                                    border-style: outset;
+                                                    color: black;
+                                                    }""")
+            self.your_turn.setStyleSheet("""QPushButton{
+                                                border: 5px solid #375;
+                                                border-style: outset;
+                                                background: rgb(60,150,90);
+                                                color: rgb(250,250,255);
+                                                }""")
             for btn in self.buttons_list:
                 btn.setEnabled(True)
 
