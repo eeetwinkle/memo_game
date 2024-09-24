@@ -47,6 +47,7 @@ class MainWindow(QMainWindow):
         self.stop_event = threading.Event()
         self.thread = None
 
+
     def button_client_clicked(self):
             button = self.sender()
 
@@ -85,6 +86,7 @@ class MainWindow(QMainWindow):
                                                     }""")
                     button.disconnect()
                 self.press_count = 0
+
 
     def handle_server(self):
         try:
@@ -145,6 +147,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             print(f"An error occurred: {e}")
 
+
     def lock_pictures(self, prev_button, current_button):
         prev_button.setIcon(QIcon('pictures/back.jpg'))
         current_button.setIcon(QIcon('pictures/back.jpg'))
@@ -169,6 +172,7 @@ class MainWindow(QMainWindow):
                                                     }""")
             #print("Поток запущен.")
 
+
     def stop_tread(self):
         # Завершаем поток
         if self.thread is not None:
@@ -188,6 +192,7 @@ class MainWindow(QMainWindow):
                                                 }""")
             for btn in self.buttons_list:
                 btn.setEnabled(True)
+
 
 if __name__ == '__main__':
     import sys
