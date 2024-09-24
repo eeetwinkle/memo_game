@@ -1137,6 +1137,12 @@ color: black;
       <pointsize>28</pointsize>
      </font>
     </property>
+    <property name="accessibleName">
+     <string>color(0,0,0)</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="text">
      <string>0:0</string>
     </property>
