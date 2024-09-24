@@ -1138,10 +1138,10 @@ color: black;
      </font>
     </property>
     <property name="accessibleName">
-     <string>color(0,0,0)</string>
+     <string/>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">color rgb(0,0,0)</string>
     </property>
     <property name="text">
      <string>0:0</string>
