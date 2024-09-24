@@ -29,11 +29,20 @@ class MainWindow(QMainWindow):
                 button = self.buttons[i * 2 + k]
                 button.setIcon(QIcon('pictures/back.jpg'))
                 button.setText('')
+
                 print(button.objectName(), pictures[i])
+
                 button.setIconSize(QSize(button.width() - 8, button.height() - 8))
                 button.setProperty('picture', pictures[i])
+
                 button.clicked.connect(self.button_server_clicked)
                 button.setEnabled(False)
+
+
+        for button in self.buttons_list():
+            pic = button.property('picture')
+
+
         self.enemys_turn.setStyleSheet("""QPushButton{
                                     border: 5px solid #721;
                                     border-style: outset;
