@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('pictures/icon.png'))
 
         self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_sock.connect(('127.0.0.1', 53210))
+        self.client_sock.connect(('127.0.0.1', 53211))
 
         self.buttons_list = self.buttons.buttons()
         self.press_count = 0
@@ -95,6 +95,11 @@ class MainWindow(QMainWindow):
                 button = self.findChild(QPushButton, button_name)
                 print(f"Button {button_name} pressed, displaying picture {picture}")
                 button.setIcon(QIcon(picture))
+                button.setStyleSheet("""QPushButton {
+                                                        border: 5px solid #832;
+                                                        border-style: outset;
+                                                        color: black;
+                                                        }""")
                 if self.enemy_press_count == 0:
                     self.prev_enemy_button = button
                     self.prev_enemy_image = picture
@@ -105,7 +110,15 @@ class MainWindow(QMainWindow):
                             btn.setEnabled(False)
                         time.sleep(1)
                         self.prev_enemy_button.setIcon(QIcon('pictures/back.jpg'))
+                        self.prev_enemy_button.setStyleSheet("""QPushButton {
+                                                                                                border: 5px solid #357;
+                                                                                                border-style: outset;
+                                                                                                }""")
                         button.setIcon(QIcon('pictures/back.jpg'))
+                        button.setStyleSheet("""QPushButton {
+                                                                               border: 5px solid #357;
+                                                                               border-style: outset;
+                                                                               }""")
                         #QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_enemy_button, button))
                         print("закрыто")
                     else:

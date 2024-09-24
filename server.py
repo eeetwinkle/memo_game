@@ -34,13 +34,11 @@ class MainWindow(QMainWindow):
                 button.setText('')
 
                 print(button.objectName(), pictures[i])
-
                 button.setIconSize(QSize(button.width() - 8, button.height() - 8))
                 button.setProperty('picture', pictures[i])
 
                 button.clicked.connect(self.button_server_clicked)
                 button.setEnabled(False)
-
 
         self.enemys_turn.setStyleSheet("""QPushButton{
                                     border: 5px solid #721;
@@ -51,7 +49,7 @@ class MainWindow(QMainWindow):
 
 
         self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_sock.bind(('', 53210))
+        self.server_sock.bind(('', 53211))
         self.server_sock.listen(1)
         print('Server is running')
 
@@ -60,7 +58,6 @@ class MainWindow(QMainWindow):
 
         self.stop_event = threading.Event()
         threading.Thread(target=self.handle_client, daemon=True).start()
-
 
     def handle_client(self):
         try:
@@ -96,7 +93,15 @@ class MainWindow(QMainWindow):
                             btn.setEnabled(False)
                         time.sleep(1)
                         self.prev_enemy_button.setIcon(QIcon('pictures/back.jpg'))
+                        self.prev_enemy_button.setStyleSheet("""QPushButton {
+                                                                        border: 5px solid #357;
+                                                                        border-style: outset;
+                                                                        }""")
                         button.setIcon(QIcon('pictures/back.jpg'))
+                        button.setStyleSheet("""QPushButton {
+                                                       border: 5px solid #357;
+                                                       border-style: outset;
+                                                       }""")
                         #QTimer.singleShot(3000, lambda: self.lock_pictures(self.prev_enemy_button, button))
                         print("закрыто")
                     else:
@@ -116,7 +121,6 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             print(f"An error occurred: {e}")
-
 
     def start_tread(self):
         if self.thread is None or not self.thread.is_alive():
@@ -198,6 +202,11 @@ class MainWindow(QMainWindow):
     def update_server_interface(self, button_name, picture_path):
         button = self.findChild(QPushButton, button_name)
         button.setIcon(QIcon(picture_path))
+        button.setStyleSheet("""QPushButton {
+                                        border: 5px solid #832;
+                                        border-style: outset;
+                                        color: black;
+                                        }""")
 
 if __name__ == '__main__':
     import sys
