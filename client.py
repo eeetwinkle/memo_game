@@ -217,7 +217,7 @@ class MainWindow(QMainWindow):
 
 
     def i_win(self):
-        self.label.setText("You lose")
+        self.label.setText("You win")
         for button in self.buttons_list:
             #button.setText("You win")
             button.setStyleSheet("""QPushButton {
