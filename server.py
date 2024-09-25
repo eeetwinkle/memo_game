@@ -122,6 +122,8 @@ class MainWindow(QMainWindow):
                                                                 color: black;
                                                                 }""")
                         button.disconnect()
+                        if self.opponent_score + self.my_score == 15:
+                            self.i_lose()
                     self.enemy_press_count = 0
 
         except Exception as e:
@@ -206,6 +208,8 @@ class MainWindow(QMainWindow):
                                                           color: black;
                                                           }""")
                 button.disconnect()
+                if self.opponent_score + self.my_score == 15:
+                    self.i_win()
             self.press_count = 0
 
 
@@ -222,6 +226,26 @@ class MainWindow(QMainWindow):
                                         border-style: outset;
                                         color: black;
                                         }""")
+
+    def i_lose(self):
+        self.label.setText("You lose")
+        for button in self.buttons_list:
+            # button.setText("You lose")
+            button.setStyleSheet("""QPushButton {
+                                                border: 5px solid #832;
+                                                border-style: outset;
+                                                color: black;
+                                                }""")
+
+    def i_win(self):
+        self.label.setText("You win")
+        for button in self.buttons_list:
+            # button.setText("You win")
+            button.setStyleSheet("""QPushButton {
+                                                border: 5px solid #375;
+                                                border-style: outset;
+                                                color: black;
+                                                }""")
 
 
 if __name__ == '__main__':
