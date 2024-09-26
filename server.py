@@ -53,15 +53,61 @@ class MainWindow(QMainWindow):
                                     }""")
 
         # Открываем сокет для отправки и приема
-        self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_sock.bind(('', 53211))
-        self.server_sock.listen(1)
+        #self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #self.server_sock.bind(('', 53211))
+        #self.server_sock.listen(1)
         #print('Server is running')
 
-        self.client_sock, self.client_addr = self.server_sock.accept()
+        self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_sock.bind(('0.0.0.0', 53210))
+        self.server_sock.listen(1)
+        self.client_sock = None
+        self.broadcast_event = threading.Event()
+        self.start_server()
+
+        #self.client_sock, self.client_addr = self.server_sock.accept()
         #print('Client connected', self.client_addr)
 
         # Открываем поток для прослушивания ходов противника
+        #self.stop_event = threading.Event()
+        #threading.Thread(target=self.handle_client, daemon=True).start()
+
+
+    def broadcast_ip(self):
+        broadcast_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        broadcast_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        # Определяем IP сервера в локальной сети
+        server_ip = socket.gethostbyname(socket.gethostname())
+        broadcast_message = f'SERVER_IP:{server_ip}'.encode('utf-8')
+        while not self.broadcast_event.is_set():
+            broadcast_sock.sendto(broadcast_message, ('<broadcast>', 37020))
+            print(f"Broadcasting server IP: {server_ip}")
+            # Отправляем сообщение каждые 2 секунды
+            self.broadcast_event.wait(2)
+
+    def start_broadcast(self):
+        self.broadcast_thread = threading.Thread(target=self.broadcast_ip, daemon=True)
+        self.broadcast_thread.start()
+
+    def stop_broadcast(self):
+        # Останавливаем поток после подключения клиента
+        self.broadcast_event.set()
+        if self.broadcast_thread.is_alive():
+            self.broadcast_thread.join()
+
+
+    def start_server(self):
+        print("Server is running, broadcasting IP for client discovery...")
+        # Запуск широковещательной трансляции
+        self.start_broadcast()
+        # Ожидание подключения клиента
+        self.client_sock, client_addr = self.server_sock.accept()
+        print(f"Client connected from {client_addr}")
+        # Остановка трансляции IP
+        self.stop_broadcast()
+        print("Broadcasting stopped.")
+
+        # Логика для обработки клиента
         self.stop_event = threading.Event()
         threading.Thread(target=self.handle_client, daemon=True).start()
 
@@ -256,3 +302,63 @@ if __name__ == '__main__':
     sys.exit(app.exec())
 
 
+import socket
+import threading
+
+class Server:
+    def __init__(self):
+        self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_sock.bind(('0.0.0.0', 53210))  # Укажите IP (например, '0.0.0.0' для всех интерфейсов)
+        self.server_sock.listen(1)
+        self.broadcast_event = threading.Event()  # Используем событие для управления потоком
+
+    def broadcast_ip(self):
+        broadcast_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        broadcast_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        server_ip = socket.gethostbyname(socket.gethostname())  # Определяем IP сервера в локальной сети
+        broadcast_message = f'SERVER_IP:{server_ip}'.encode('utf-8')
+        while not self.broadcast_event.is_set():
+            broadcast_sock.sendto(broadcast_message, ('<broadcast>', 37020))
+            print(f"Broadcasting server IP: {server_ip}")
+            self.broadcast_event.wait(2)  # Отправляем сообщение каждые 2 секунды
+
+    def start_broadcast(self):
+        self.broadcast_thread = threading.Thread(target=self.broadcast_ip, daemon=True)
+        self.broadcast_thread.start()
+
+    def stop_broadcast(self):
+        self.broadcast_event.set()  # Останавливаем поток после подключения клиента
+        if self.broadcast_thread.is_alive():
+            self.broadcast_thread.join()
+
+    def start_server(self):
+        print("Server is running, broadcasting IP for client discovery...")
+        self.start_broadcast()  # Запуск широковещательной трансляции
+
+        client_sock, client_addr = self.server_sock.accept()  # Ожидание подключения клиента
+        print(f"Client connected from {client_addr}")
+
+        self.stop_broadcast()  # Остановка трансляции IP
+        print("Broadcasting stopped.")
+
+        # Логика для обработки клиента
+        threading.Thread(target=self.handle_client, args=(client_sock,), daemon=True).start()
+
+    def handle_client(self, client_sock):
+        try:
+            while True:
+                data = client_sock.recv(1024)
+                if not data:
+                    break
+                # Обработка данных клиента
+                print(f"Received from client: {data.decode('utf-8')}")
+                # Серверная логика (например, отправка изображения или команды)
+                client_sock.sendall(b"Message from server")
+        except Exception as e:
+            print(f"Error: {e}")
+        finally:
+            client_sock.close()
+
+# if __name__ == "__main__":
+#     server = Server()
+#     server.start_server()

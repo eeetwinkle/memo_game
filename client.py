@@ -15,8 +15,28 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('pictures/icon.png'))
 
         # Открываем сокет для приема и отправки сообщений
+        #self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #self.client_sock.connect(('127.0.0.1', 53211))
+        self.server_ip = None
         self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_sock.connect(('127.0.0.1', 53211))
+        # Создаем UDP сокет для прослушивания широковещательных сообщений
+        udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        udp_sock.bind(('', 37020))
+
+        print("Looking for the server...")
+        while not self.server_ip:
+            data, addr = udp_sock.recvfrom(1024)
+            message = data.decode('utf-8')
+            if message.startswith('SERVER_IP:'):
+                self.server_ip = message.split(':')[1]
+                print(f"Server IP found: {self.server_ip}")
+
+        if self.server_ip:
+            self.client_sock.connect((self.server_ip, 53210))
+            print("Connected to server")
+        else:
+            print("No server IP found.")
 
         self.buttons_list = self.buttons.buttons()
         # Счетчики для проверки выигрышных ходов
@@ -233,3 +253,42 @@ if __name__ == '__main__':
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
+
+
+import socket
+
+class Client:
+    def __init__(self):
+        self.server_ip = None
+        self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def find_server(self):
+        # Создаем UDP сокет для прослушивания широковещательных сообщений
+        udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        udp_sock.bind(('', 37020))  # Порт для приема сообщений от сервера
+
+        print("Looking for the server...")
+        while not self.server_ip:
+            data, addr = udp_sock.recvfrom(1024)
+            message = data.decode('utf-8')
+            if message.startswith('SERVER_IP:'):
+                self.server_ip = message.split(':')[1]
+                print(f"Server IP found: {self.server_ip}")
+
+    def connect_to_server(self):
+        if self.server_ip:
+            self.client_sock.connect((self.server_ip, 53210))
+            print("Connected to server")
+
+            # Логика взаимодействия с сервером
+            self.client_sock.sendall(b"Hello, server!")
+            data = self.client_sock.recv(1024)
+            print(f"Received from server: {data.decode('utf-8')}")
+        else:
+            print("No server IP found.")
+
+# if __name__ == "__main__":
+#     client = Client()
+#     client.find_server()
+#     client.connect_to_server()
