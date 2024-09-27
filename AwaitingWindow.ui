@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>280</height>
+    <width>781</width>
+    <height>194</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,21 +22,21 @@ qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(254, 255,253, 25
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>641</width>
-     <height>171</height>
+     <width>781</width>
+     <height>131</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Snap ITC</family>
-     <pointsize>68</pointsize>
+     <pointsize>32</pointsize>
     </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(255,0,0);</string>
    </property>
    <property name="text">
-    <string>You lose</string>
+    <string>Awaiting for second user</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -46,9 +46,9 @@ qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(254, 255,253, 25
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>180</y>
-     <width>621</width>
-     <height>101</height>
+     <y>120</y>
+     <width>761</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="font">

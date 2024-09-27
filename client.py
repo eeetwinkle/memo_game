@@ -108,7 +108,10 @@ class MainWindow(QMainWindow):
                     button.disconnect()
 
                     if self.opponent_score + self.my_score == 15:
-                        self.i_win()
+                        if self.opponent_score > self.my_score:
+                            self.i_lose()
+                        else:
+                            self.i_win()
 
                 self.press_count = 0
 
@@ -153,7 +156,10 @@ class MainWindow(QMainWindow):
                         button.disconnect()
                         
                         if self.opponent_score + self.my_score == 15:
-                            self.i_lose()
+                            if self.opponent_score > self.my_score:
+                                self.i_lose()
+                            else:
+                                self.i_win()
 
                     self.enemy_press_count = 0
 
