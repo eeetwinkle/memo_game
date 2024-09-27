@@ -11,32 +11,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('MainWindow.ui', self)
-        self.setWindowTitle("Мемо - игра для вас и ваших друзей")
-        self.setWindowIcon(QIcon('pictures/icon.png'))
-
-        # Открываем сокет для приема и отправки сообщений
-        #self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #self.client_sock.connect(('127.0.0.1', 53211))
-        self.server_ip = None
-        self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # Создаем UDP сокет для прослушивания широковещательных сообщений
-        udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        udp_sock.bind(('', 37020))
-
-        print("Looking for the server...")
-        while not self.server_ip:
-            data, addr = udp_sock.recvfrom(1024)
-            message = data.decode('utf-8')
-            if message.startswith('SERVER_IP:'):
-                self.server_ip = message.split(':')[1]
-                print(f"Server IP found: {self.server_ip}")
-
-        if self.server_ip:
-            self.client_sock.connect((self.server_ip, 53210))
-            print("Connected to server")
-        else:
-            print("No server IP found.")
+        self.setWindowTitle('Мемо - игра для вас и ваших друзей')
+        self.setWindowIcon(QIcon('pictures/back.jpg'))
 
         self.buttons_list = self.buttons.buttons()
         # Счетчики для проверки выигрышных ходов
@@ -57,12 +33,37 @@ class MainWindow(QMainWindow):
             button.clicked.connect(self.button_client_clicked)
 
         # Сейчас наш ход
-        self.your_turn.setStyleSheet("""QPushButton{
-                                        border: 5px solid #375;
-                                        border-style: outset;
-                                        background: rgb(60,150,90);
-                                        color: rgb(250,250,255);
-                                        }""")
+        self.your_turn.setStyleSheet('''QPushButton{
+                                                border: 5px solid #375;
+                                                border-style: outset;
+                                                background: rgb(60,150,90);
+                                                color: rgb(250,250,255);
+                                                }''')
+
+        # Открываем сокет для приема и отправки сообщений
+        #self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #self.client_sock.connect(('127.0.0.1', 53211))
+
+        self.server_ip = None
+        self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Создаем UDP сокет для прослушивания широковещательных сообщений
+        udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        udp_sock.bind(('', 37021))
+
+        print('Looking for the server...')
+        while not self.server_ip:
+            data, addr = udp_sock.recvfrom(1024)
+            message = data.decode('utf-8')
+            if message.startswith('SERVER_IP:'):
+                self.server_ip = message.split(':')[1]
+                print(f'Server IP found: {self.server_ip}')
+
+        if self.server_ip:
+            self.client_sock.connect((self.server_ip, 53210))
+            print('Connected to server')
+        else:
+            print('No server IP found.')
 
 
         # Задаем условие выхода из потока для приема ходов противника
@@ -74,17 +75,19 @@ class MainWindow(QMainWindow):
             button = self.sender()
 
             # Отправляем информацию о кнопке на сервер
-            button_info = f"{button.objectName()}|?"
+            button_info = f'{button.objectName()}|?'
             self.client_sock.sendall(button_info.encode('utf-8'))
 
             data = self.client_sock.recv(1024)
             btn, picture = data.decode('utf-8').split('|')
             button.setIcon(QIcon(picture))
+
             # Если ход четный, то проверяемм условие выигрышности
             if self.press_count == 0:
                 self.prev_image = picture
                 self.prev_button = button
                 self.press_count += 1
+
             else:
                 if self.prev_image != picture:
                     for btn in self.buttons_list:
@@ -92,26 +95,21 @@ class MainWindow(QMainWindow):
                     self.client_sock.sendall('end'.encode('utf-8'))
                     # Запускаем поток приема информации
                     self.start_tread()
+
                     # Закрываем карточки
                     QTimer.singleShot(1000, lambda: self.lock_pictures(self.prev_button, button))
-
                 else:
                     self.my_score += 1
-                    self.score.setText(str(self.my_score) + ":" + str(self.opponent_score))
-                    self.prev_button.setStyleSheet("""QPushButton {
-                                                            border: 5px solid #375;
-                                                            border-style: outset;
-                                                            color: black;
-                                                            }""")
+                    self.score.setText(str(self.my_score) + ':' + str(self.opponent_score))
+
+                    self.update_button_color(self.prev_button, 'g')
                     self.prev_button.disconnect()
-                    button.setStyleSheet("""QPushButton {
-                                                    border: 5px solid #375;
-                                                    border-style: outset;
-                                                    color: black;
-                                                    }""")
+                    self.update_button_color(button, 'g')
                     button.disconnect()
+
                     if self.opponent_score + self.my_score == 15:
                         self.i_win()
+
                 self.press_count = 0
 
 
@@ -129,13 +127,9 @@ class MainWindow(QMainWindow):
                     break
                 button_name, picture = message.split('|')
                 button = self.findChild(QPushButton, button_name)
-                #print(f"Button {button_name} pressed, displaying picture {picture}")
-                button.setIcon(QIcon(picture))
-                button.setStyleSheet("""QPushButton {
-                                                    border: 5px solid #832;
-                                                    border-style: outset;
-                                                    color: black;
-                                                    }""")
+                #print(f'Button {button_name} pressed, displaying picture {picture}')
+                self.update_button(button, picture, 'r')
+
                 if self.enemy_press_count == 0:
                     self.prev_enemy_button = button
                     self.prev_enemy_image = picture
@@ -145,39 +139,26 @@ class MainWindow(QMainWindow):
                         for btn in self.buttons_list:
                             btn.setEnabled(False)
                         time.sleep(1)
-                        self.prev_enemy_button.setIcon(QIcon('pictures/back.jpg'))
-                        self.prev_enemy_button.setStyleSheet("""QPushButton {
-                                                                      border: 5px solid #357;
-                                                                      border-style: outset;
-                                                                      }""")
-                        button.setIcon(QIcon('pictures/back.jpg'))
-                        button.setStyleSheet("""QPushButton {
-                                                                       border: 5px solid #357;
-                                                                       border-style: outset;
-                                                                       }""")
+
+                        self.update_button(self.prev_enemy_button, 'pictures/back.jpg', 'b')
+                        self.update_button(button, 'pictures/back.jpg', 'b')
                     else:
                         self.opponent_score += 1
-                        self.score.setText(str(self.my_score) + ":" + str(self.opponent_score))
-                        self.prev_enemy_button.setStyleSheet("""QPushButton {
-                                                                                border: 5px solid #832;
-                                                                                border-style: outset;
-                                                                                color: black;
-                                                                                }""")
+                        self.score.setText(str(self.my_score) + ':' + str(self.opponent_score))
+                        
+                        self.update_button_color(self.prev_enemy_button, 'r')
                         # После удачного хода кнопки не вызывают никакую функцию
                         self.prev_enemy_button.disconnect()
-                        button.setStyleSheet("""QPushButton {
-                                                                border: 5px solid #832;
-                                                                border-style: outset;
-                                                                color: black;
-                                                                }""")
+                        self.update_button_color(button, 'r')
                         button.disconnect()
+                        
                         if self.opponent_score + self.my_score == 15:
                             self.i_lose()
+
                     self.enemy_press_count = 0
 
-
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f'An error occurred: {e}')
 
 
     def lock_pictures(self, prev_button, current_button):
@@ -191,18 +172,18 @@ class MainWindow(QMainWindow):
             self.stop_event.clear()
             self.thread = threading.Thread(target=self.handle_server, daemon=True)
             self.thread.start()
-            self.enemys_turn.setStyleSheet("""QPushButton{
+            self.enemys_turn.setStyleSheet('''QPushButton{
                                                     border: 5px solid #721;
                                                     border-style: outset;
                                                     background: rgb(180,50,40);
                                                     color: rgb(250,250,255);
-                                                    }""")
-            self.your_turn.setStyleSheet("""QPushButton {
+                                                    }''')
+            self.your_turn.setStyleSheet('''QPushButton {
                                                     border: 5px solid #375;
                                                     border-style: outset;
                                                     color: black;
-                                                    }""")
-            #print("Поток запущен.")
+                                                    }''')
+            #print('Поток запущен.')
 
 
     def stop_tread(self):
@@ -210,41 +191,65 @@ class MainWindow(QMainWindow):
         if self.thread is not None:
             self.stop_event.set()
             self.thread = None
-            #print("Поток остановлен.")
-            self.enemys_turn.setStyleSheet("""QPushButton {
+            #print('Поток остановлен.')
+            self.enemys_turn.setStyleSheet('''QPushButton {
                                                     border: 5px solid #832;
                                                     border-style: outset;
                                                     color: black;
-                                                    }""")
-            self.your_turn.setStyleSheet("""QPushButton{
+                                                    }''')
+            self.your_turn.setStyleSheet('''QPushButton{
                                                 border: 5px solid #375;
                                                 border-style: outset;
                                                 background: rgb(60,150,90);
                                                 color: rgb(250,250,255);
-                                                }""")
+                                                }''')
             for btn in self.buttons_list:
                 btn.setEnabled(True)
 
+    
+    def update_button(self, button, picture_path, color):
+        button.setIcon(QIcon(picture_path))
+        self.update_button_color(button, color)
+        
+        
+    def update_button_color(self, button, color):
+        style = ''
+        if color == 'r':
+            style = '''QPushButton {
+                                    border: 5px solid #832;
+                                    border-style: outset;
+                                    color: black;
+                                    }'''
+        elif color == 'g':
+            style = '''QPushButton {
+                                    border: 5px solid #375;
+                                    border-style: outset;
+                                    color: black;
+                                    }'''
+
+        else:
+            style = '''QPushButton {
+                                    border: 5px solid #357;
+                                    border-style: outset;
+                                    }'''
+
+        button.setStyleSheet(style)
+
+
     def i_lose(self):
-        self.label.setText("You lose")
+        self.label.setText('You lose')
+        self.label.setStyleSheet('''font-size: 90px;
+                                 color: rgb(255,0,0);''')
         for button in self.buttons_list:
-            #button.setText("You lose")
-            button.setStyleSheet("""QPushButton {
-                                                border: 5px solid #832;
-                                                border-style: outset;
-                                                color: black;
-                                                }""")
+            self.update_button_color(button, 'r')
 
 
     def i_win(self):
-        self.label.setText("You win")
+        self.label.setText('You win')
+        self.label.setStyleSheet('''font-size: 90px;
+                                 color: rgb(255,0,0);''')
         for button in self.buttons_list:
-            #button.setText("You win")
-            button.setStyleSheet("""QPushButton {
-                                                border: 5px solid #375;
-                                                border-style: outset;
-                                                color: black;
-                                                }""")
+            self.update_button_color(button, 'g')
 
 
 if __name__ == '__main__':
@@ -253,42 +258,3 @@ if __name__ == '__main__':
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
-
-
-import socket
-
-class Client:
-    def __init__(self):
-        self.server_ip = None
-        self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    def find_server(self):
-        # Создаем UDP сокет для прослушивания широковещательных сообщений
-        udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        udp_sock.bind(('', 37020))  # Порт для приема сообщений от сервера
-
-        print("Looking for the server...")
-        while not self.server_ip:
-            data, addr = udp_sock.recvfrom(1024)
-            message = data.decode('utf-8')
-            if message.startswith('SERVER_IP:'):
-                self.server_ip = message.split(':')[1]
-                print(f"Server IP found: {self.server_ip}")
-
-    def connect_to_server(self):
-        if self.server_ip:
-            self.client_sock.connect((self.server_ip, 53210))
-            print("Connected to server")
-
-            # Логика взаимодействия с сервером
-            self.client_sock.sendall(b"Hello, server!")
-            data = self.client_sock.recv(1024)
-            print(f"Received from server: {data.decode('utf-8')}")
-        else:
-            print("No server IP found.")
-
-# if __name__ == "__main__":
-#     client = Client()
-#     client.find_server()
-#     client.connect_to_server()
