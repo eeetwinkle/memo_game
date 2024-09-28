@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>781</width>
-    <height>194</height>
+    <height>195</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <string notr="true">background: rgb(240,240,250)
 qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(254, 255,253, 255), stop:1 rgba(252, 253,251, 255))</string>
   </property>
-  <widget class="QLabel" name="exit_button">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -42,7 +42,7 @@ qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(254, 255,253, 25
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="A1">
+  <widget class="QPushButton" name="exit_button">
    <property name="geometry">
     <rect>
      <x>10</x>

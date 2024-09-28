@@ -1,13 +1,23 @@
 import socket
 import threading
-from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton
+from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget
 from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import QSize, QTimer
+from PyQt6.QtCore import QSize, QTimer, pyqtSignal
 from PyQt6 import uic
 import random
 import time
 
+class AwaitingWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('AwaitingWindow.ui', self)
+        self.setWindowTitle('Мемо - игра для вас и ваших друзей')
+        self.setWindowIcon(QIcon('pictures/back.jpg'))
+
+
 class MainWindow(QMainWindow):
+    # Сигнал для уведомления об успешном подключении
+    connection_successful = pyqtSignal()
     def __init__(self):
         super().__init__()
         uic.loadUi('MainWindow.ui', self)
@@ -15,6 +25,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('pictures/back.jpg'))
 
         self.buttons_list = self.buttons.buttons()
+
         # Счетчики для проверки выигрышных ходов
         self.press_count = 0
         self.prev_image = ''
@@ -32,39 +43,50 @@ class MainWindow(QMainWindow):
             button.setIconSize(QSize(button.width() - 8, button.height() - 8))
             button.clicked.connect(self.button_client_clicked)
 
-        # Сейчас наш ход
+        # Настраиваем стиль для хода игрока
         self.your_turn.setStyleSheet('''QPushButton{
-                                                border: 5px solid #375;
-                                                border-style: outset;
-                                                background: rgb(60,150,90);
-                                                color: rgb(250,250,255);
-                                                }''')
+                                                    border: 5px solid #375;
+                                                    border-style: outset;
+                                                    background: rgb(60,150,90);
+                                                    color: rgb(250,250,255);
+                                                    }''')
 
-        # Открываем сокет для приема и отправки сообщений
-        #self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #self.client_sock.connect(('127.0.0.1', 53211))
-
+        # Инициализация сокета
         self.server_ip = None
         self.client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # Создаем UDP сокет для прослушивания широковещательных сообщений
+
+        # Привязываем сигнал успешного подключения
+        self.connection_successful.connect(self.on_connection_successful)
+
+    def connect_to_server(self):
+        # Открываем юпд сокет для отловки сигнала трансляции
         udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         udp_sock.bind(('', 37021))
 
+        awaiting_window.label.setText('Looking for the server...')
         print('Looking for the server...')
+
         while not self.server_ip:
             data, addr = udp_sock.recvfrom(1024)
             message = data.decode('utf-8')
             if message.startswith('SERVER_IP:'):
                 self.server_ip = message.split(':')[1]
+                awaiting_window.label.setText(f'Server IP found: {self.server_ip}')
                 print(f'Server IP found: {self.server_ip}')
 
         if self.server_ip:
             self.client_sock.connect((self.server_ip, 53210))
+            awaiting_window.label.setText('Connected to server')
             print('Connected to server')
-        else:
-            print('No server IP found.')
 
+            # Генерируем сигнал об успешном подключении
+            self.connection_successful.emit()
+
+    def on_connection_successful(self):
+        # Закрываем окно ожидания и показываем главное окно
+        self.awaiting_window.close()
+        self.show()
 
         # Задаем условие выхода из потока для приема ходов противника
         self.stop_event = threading.Event()
@@ -261,6 +283,13 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
+    awaiting_window = AwaitingWindow()
+    awaiting_window.show()
+    main_window = MainWindow()
+    main_window.awaiting_window = awaiting_window  # Передаем ссылку на окно ожидания
+
+    # Создаем поток для подключения к серверу
+    connection_thread = threading.Thread(target=main_window.connect_to_server)
+    connection_thread.start()
+
     sys.exit(app.exec())
