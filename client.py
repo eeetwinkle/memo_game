@@ -74,6 +74,7 @@ class MainWindow(QMainWindow):
                 self.server_ip = message.split(':')[1]
                 awaiting_window.label.setText(f'Server IP found: {self.server_ip}')
                 print(f'Server IP found: {self.server_ip}')
+                time.sleep(1)
 
         if self.server_ip:
             self.client_sock.connect((self.server_ip, 53210))
@@ -127,9 +128,9 @@ class MainWindow(QMainWindow):
                     self.score.setText(str(self.my_score) + ':' + str(self.opponent_score))
 
                     self.update_button_color(self.prev_button, 'g')
-                    self.prev_button.disconnect()
+                    #self.prev_button.disconnect()
                     self.update_button_color(button, 'g')
-                    button.disconnect()
+                    #button.disconnect()
 
                     if self.opponent_score + self.my_score == 15:
                         if self.opponent_score > self.my_score:
@@ -288,7 +289,8 @@ if __name__ == '__main__':
     awaiting_window = AwaitingWindow()
     awaiting_window.show()
     main_window = MainWindow()
-    main_window.awaiting_window = awaiting_window  # Передаем ссылку на окно ожидания
+    # Передаем ссылку на окно ожидания
+    main_window.awaiting_window = awaiting_window
 
     # Создаем поток для подключения к серверу
     connection_thread = threading.Thread(target=main_window.connect_to_server)
