@@ -106,12 +106,14 @@ class MainWindow(QMainWindow):
 
             # Если ход четный, то проверяемм условие выигрышности
             if self.press_count == 0:
+                button.disconnect()
                 self.prev_image = picture
                 self.prev_button = button
                 self.press_count += 1
 
             else:
                 if self.prev_image != picture:
+                    self.prev_button.clicked.connect(self.button_client_clicked)
                     for btn in self.buttons_list:
                         btn.setEnabled(False)
                     self.client_sock.sendall('end'.encode('utf-8'))
