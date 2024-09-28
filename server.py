@@ -1,13 +1,24 @@
 import socket
 import threading
-from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton
+from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget
 from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import QSize, QTimer
+from PyQt6.QtCore import QSize, QTimer, pyqtSignal
 from PyQt6 import QtWidgets, uic
 import random
 import time
 
+
+class AwaitingWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('AwaitingWindow.ui', self)
+        self.setWindowTitle('Мемо - игра для вас и ваших друзей')
+        self.setWindowIcon(QIcon('pictures/back.jpg'))
+
+
 class MainWindow(QMainWindow):
+    # Сигнал для уведомления об успешном подключении
+    connection_successful = pyqtSignal()
     def __init__(self):
         super().__init__()
         uic.loadUi('MainWindow.ui', self)
@@ -63,8 +74,9 @@ class MainWindow(QMainWindow):
         self.server_sock.listen(1)
         self.client_sock = None
         # Запускаем трансляцию сообщения для всех пользователей локальной сети
-        self.broadcast_event = threading.Event()
-        self.start_server()
+
+        #self.start_server()
+        self.connection_successful.connect(self.on_connection_successful)
 
         #self.client_sock, self.client_addr = self.server_sock.accept()
         #print('Client connected', self.client_addr)
@@ -84,10 +96,12 @@ class MainWindow(QMainWindow):
             broadcast_sock.sendto(broadcast_message, ('<broadcast>', 37021))
             print(f'Broadcasting server IP: {server_ip}')
             # Отправляем сообщение каждые 2 секунды
-            self.broadcast_event.wait(2)
+            self.broadcast_event.wait(1)
 
 
     def start_server(self):
+        self.broadcast_event = threading.Event()
+        awaiting_window.label.setText('Looking for the client...')
         print('Server is running, broadcasting IP for client discovery...')
 
         # Запуск широковещательной трансляции
@@ -96,13 +110,23 @@ class MainWindow(QMainWindow):
 
         # Ожидание подключения клиента
         self.client_sock, client_addr = self.server_sock.accept()
+        awaiting_window.label.setText(f'Client connected from {client_addr}')
         print(f'Client connected from {client_addr}')
+        time.sleep(1)
 
         # Остановка трансляции IP
         self.broadcast_event.set()
         if self.broadcast_thread.is_alive():
             self.broadcast_thread.join()
+
         print('Broadcasting stopped.')
+        self.connection_successful.emit()
+
+
+    def on_connection_successful(self):
+        # Закрываем окно ожидания и показываем главное окно
+        self.awaiting_window.close()
+        self.show()
 
         # Логика для обработки клиента
         self.stop_event = threading.Event()
@@ -240,9 +264,9 @@ class MainWindow(QMainWindow):
                 self.score.setText(str(self.my_score) + ':' + str(self.opponent_score))
 
                 self.update_button_color(self.prev_button, 'g')
-                self.prev_button.disconnect()
+                #self.prev_button.disconnect()
                 self.update_button_color(button, 'g')
-                button.disconnect()
+                #button.disconnect()
 
                 if self.opponent_score + self.my_score == 15:
                     if self.opponent_score > self.my_score:
@@ -303,6 +327,14 @@ class MainWindow(QMainWindow):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
+    awaiting_window = AwaitingWindow()
+    awaiting_window.show()
+    main_window = MainWindow()
+    # Передаем ссылку на окно ожидания
+    main_window.awaiting_window = awaiting_window
+
+    # Создаем поток для подключения к серверу
+    connection_thread = threading.Thread(target=main_window.start_server)
+    connection_thread.start()
+
     sys.exit(app.exec())
