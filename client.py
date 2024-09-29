@@ -6,13 +6,14 @@ from PyQt6.QtCore import QSize, QTimer, pyqtSignal
 from PyQt6 import uic
 import random
 import time
+import os
 
 class AwaitingWindow(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi('AwaitingWindow.ui', self)
+        uic.loadUi(os.path.join(os.path.dirname(__file__), 'ui/AwaitingWindow.ui'), self)
         self.setWindowTitle('Мемо - игра для вас и ваших друзей')
-        self.setWindowIcon(QIcon('pictures/back.jpg'))
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
 
 
 class MainWindow(QMainWindow):
@@ -20,9 +21,9 @@ class MainWindow(QMainWindow):
     connection_successful = pyqtSignal()
     def __init__(self):
         super().__init__()
-        uic.loadUi('MainWindow.ui', self)
+        uic.loadUi(os.path.join(os.path.dirname(__file__), 'ui/MainWindow.ui'), self)
         self.setWindowTitle('Мемо - игра для вас и ваших друзей')
-        self.setWindowIcon(QIcon('pictures/back.jpg'))
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
 
         self.buttons_list = self.buttons.buttons()
 
@@ -38,7 +39,7 @@ class MainWindow(QMainWindow):
 
         # Ставим начальные картинки на все кнопки
         for button in self.buttons_list:
-            button.setIcon(QIcon('pictures/back.jpg'))
+            button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
             button.setText('')
             button.setIconSize(QSize(button.width() - 8, button.height() - 8))
             button.clicked.connect(self.button_client_clicked)
@@ -57,6 +58,7 @@ class MainWindow(QMainWindow):
 
         # Привязываем сигнал успешного подключения
         self.connection_successful.connect(self.on_connection_successful)
+
 
     def connect_to_server(self):
         # Открываем юпд сокет для отловки сигнала трансляции
@@ -83,6 +85,7 @@ class MainWindow(QMainWindow):
 
             # Генерируем сигнал об успешном подключении
             self.connection_successful.emit()
+
 
     def on_connection_successful(self):
         # Закрываем окно ожидания и показываем главное окно
@@ -168,8 +171,8 @@ class MainWindow(QMainWindow):
                             btn.setEnabled(False)
                         time.sleep(1)
 
-                        self.update_button(self.prev_enemy_button, 'pictures/back.jpg', 'b')
-                        self.update_button(button, 'pictures/back.jpg', 'b')
+                        self.update_button(self.prev_enemy_button, os.path.join(os.path.dirname(__file__), 'pictures/back.jpg'), 'b')
+                        self.update_button(button, os.path.join(os.path.dirname(__file__), 'pictures/back.jpg'), 'b')
                     else:
                         self.opponent_score += 1
                         self.score.setText(str(self.my_score) + ':' + str(self.opponent_score))
@@ -193,8 +196,8 @@ class MainWindow(QMainWindow):
 
 
     def lock_pictures(self, prev_button, current_button):
-        prev_button.setIcon(QIcon('pictures/back.jpg'))
-        current_button.setIcon(QIcon('pictures/back.jpg'))
+        prev_button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
+        current_button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
 
 
     def start_tread(self):
@@ -293,7 +296,7 @@ if __name__ == '__main__':
     main_window.awaiting_window = awaiting_window
 
     # Создаем поток для подключения к серверу
-    connection_thread = threading.Thread(target=main_window.connect_to_server)
+    connection_thread = threading.Thread(target=main_window.connect_to_server, daemon=True)
     connection_thread.start()
 
     sys.exit(app.exec())

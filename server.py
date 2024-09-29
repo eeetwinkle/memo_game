@@ -6,14 +6,15 @@ from PyQt6.QtCore import QSize, QTimer, pyqtSignal
 from PyQt6 import QtWidgets, uic
 import random
 import time
+import os
 
 
 class AwaitingWindow(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi('AwaitingWindow.ui', self)
+        uic.loadUi(os.path.join(os.path.dirname(__file__), 'ui/AwaitingWindow.ui'), self)
         self.setWindowTitle('Мемо - игра для вас и ваших друзей')
-        self.setWindowIcon(QIcon('pictures/back.jpg'))
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
 
 
 class MainWindow(QMainWindow):
@@ -21,9 +22,9 @@ class MainWindow(QMainWindow):
     connection_successful = pyqtSignal()
     def __init__(self):
         super().__init__()
-        uic.loadUi('MainWindow.ui', self)
+        uic.loadUi(os.path.join(os.path.dirname(__file__), 'ui/MainWindow.ui'), self)
         self.setWindowTitle('Мемо - игра для вас и ваших друзей')
-        self.setWindowIcon(QIcon('pictures/back.jpg'))
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
 
         self.buttons_list = self.buttons.buttons()
         # Счетчики для проверки выигрышных ходов
@@ -37,7 +38,7 @@ class MainWindow(QMainWindow):
         self.opponent_score = 0
 
         # Присваиваем кнопкам случайные картинки
-        pictures = [f'pictures/girls/{i + 1}.jpg' for i in range(15)]
+        pictures = [os.path.join(os.path.dirname(__file__), f'pictures/girls/{i + 1}.jpg') for i in range(15)]
         self.buttons = self.buttons.buttons()
         random.shuffle(pictures)
         random.shuffle(self.buttons)
@@ -45,7 +46,7 @@ class MainWindow(QMainWindow):
         for i in range(15):
             for k in range(2):
                 button = self.buttons[i * 2 + k]
-                button.setIcon(QIcon('pictures/back.jpg'))
+                button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
                 button.setText('')
 
                 print(button.objectName(), pictures[i])
@@ -169,8 +170,8 @@ class MainWindow(QMainWindow):
                             btn.setEnabled(False)
                         time.sleep(1)
 
-                        self.update_server_interface(self.prev_enemy_button, 'pictures/back.jpg', 'b')
-                        self.update_server_interface(button, 'pictures/back.jpg', 'b')
+                        self.update_server_interface(self.prev_enemy_button, os.path.join(os.path.dirname(__file__), 'pictures/back.jpg'), 'b')
+                        self.update_server_interface(button, os.path.join(os.path.dirname(__file__), 'pictures/back.jpg'), 'b')
                     else:
                         self.opponent_score += 1
                         self.score.setText(str(self.my_score) + ':' + str(self.opponent_score))
@@ -278,8 +279,8 @@ class MainWindow(QMainWindow):
 
 
     def lock_pictures(self, prev_button, current_button):
-        prev_button.setIcon(QIcon('pictures/back.jpg'))
-        current_button.setIcon(QIcon('pictures/back.jpg'))
+        prev_button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
+        current_button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
 
 
     def update_server_interface(self, button, picture_path, color):
@@ -334,7 +335,7 @@ if __name__ == '__main__':
     main_window.awaiting_window = awaiting_window
 
     # Создаем поток для подключения к серверу
-    connection_thread = threading.Thread(target=main_window.start_server)
+    connection_thread = threading.Thread(target=main_window.start_server, daemon=True)
     connection_thread.start()
 
     sys.exit(app.exec())
