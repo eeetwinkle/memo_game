@@ -19,6 +19,9 @@
 * Система рейтингов: будет введена систему очков, чтобы игроки могли отслеживать свои успехи.
 * Настройки для разных возрастных групп: добавятся различные уровни сложности, чтобы адаптировать игру к разным возрастам.
 
+## Руководство по установке приложения
+.exe и .app(для macOS) файлы хранятся в папке проекта dist. Откройте их, чтобы воспользоваться приложением. 
+ 
 ![Image alt](https://github.com/eeetwinkle/memo_game/blob/main/pictures/screenshots/screen1.png "Looking for the server..")
 ![Image alt](https://github.com/eeetwinkle/memo_game/blob/main/pictures/screenshots/screen2.png "Looking for the client..")
 ![Image alt](https://github.com/eeetwinkle/memo_game/blob/main/pictures/screenshots/screen3.png "Start screen")
