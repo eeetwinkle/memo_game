@@ -11,9 +11,9 @@ import os
 class AwaitingWindow(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi(os.path.join(os.path.dirname(__file__), 'ui/AwaitingWindow.ui'), self)
+        uic.loadUi('ui/AwaitingWindow.ui', self)
         self.setWindowTitle('Мемо - игра для вас и ваших друзей')
-        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
+        self.setWindowIcon(QIcon('pictures/back.jpg'))
 
 
 class MainWindow(QMainWindow):
@@ -21,9 +21,9 @@ class MainWindow(QMainWindow):
     connection_successful = pyqtSignal()
     def __init__(self):
         super().__init__()
-        uic.loadUi(os.path.join(os.path.dirname(__file__), 'ui/MainWindow.ui'), self)
+        uic.loadUi('ui/MainWindow.ui', self)
         self.setWindowTitle('Мемо - игра для вас и ваших друзей')
-        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
+        self.setWindowIcon(QIcon('pictures/back.jpg'))
 
         self.buttons_list = self.buttons.buttons()
 
@@ -39,7 +39,8 @@ class MainWindow(QMainWindow):
 
         # Ставим начальные картинки на все кнопки
         for button in self.buttons_list:
-            button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
+            button.setIcon(QIcon('pictures/back.jpg'
+                                 ))
             button.setText('')
             button.setIconSize(QSize(button.width() - 8, button.height() - 8))
             button.clicked.connect(self.button_client_clicked)
@@ -196,8 +197,8 @@ class MainWindow(QMainWindow):
 
 
     def lock_pictures(self, prev_button, current_button):
-        prev_button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
-        current_button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
+        prev_button.setIcon(QIcon('pictures/back.jpg'))
+        current_button.setIcon(QIcon('pictures/back.jpg'))
 
 
     def start_tread(self):

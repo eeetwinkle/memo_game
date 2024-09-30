@@ -5,7 +5,7 @@ a = Analysis(
     ['server.py'],
     pathex=[],
     binaries=[],
-    datas=[('ui/*', 'ui'), ('pictures/girls/*', 'pictures/girls'), ('pictures/cats/*', 'pictures/cats'), ('pictures/*', 'pictures')],
+    datas=[('ui/*', 'ui'), ('pictures/girls/*', 'pictures/girls'), ('pictures/cats/*', 'pictures/cats'), ('pictures/*', 'pictures/')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
