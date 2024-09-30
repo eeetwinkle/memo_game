@@ -12,9 +12,9 @@ import os
 class AwaitingWindow(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/AwaitingWindow.ui', self)
+        uic.loadUi(os.path.join(os.path.dirname(__file__), 'ui/AwaitingWindow.ui'), self)
         self.setWindowTitle('Мемо - игра для вас и ваших друзей')
-        self.setWindowIcon(QIcon('pictures/back.jpg'))
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
 
 
 class MainWindow(QMainWindow):
@@ -22,9 +22,9 @@ class MainWindow(QMainWindow):
     connection_successful = pyqtSignal()
     def __init__(self):
         super().__init__()
-        uic.loadUi('ui/MainWindow.ui', self)
+        uic.loadUi(os.path.join(os.path.dirname(__file__), 'ui/MainWindow.ui'), self)
         self.setWindowTitle('Мемо - игра для вас и ваших друзей')
-        self.setWindowIcon(QIcon('pictures/back.jpg'))
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
 
         self.buttons_list = self.buttons.buttons()
         # Счетчики для проверки выигрышных ходов
@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
         for i in range(15):
             for k in range(2):
                 button = self.buttons[i * 2 + k]
-                button.setIcon(QIcon('pictures/back.jpg'))
+                button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
                 button.setText('')
 
                 print(button.objectName(), pictures[i])
@@ -240,7 +240,7 @@ class MainWindow(QMainWindow):
 
         button_info = f'{button.objectName()}|{picture}'
         self.client_sock.sendall(button_info.encode('utf-8'))
-        button.setIcon(QIcon(picture))
+        self.update_server_interface(button, picture, 'b')
 
         # Если ход четный, то проверяемм условие выигрышности
         if self.press_count == 0:
@@ -279,12 +279,12 @@ class MainWindow(QMainWindow):
 
 
     def lock_pictures(self, prev_button, current_button):
-        prev_button.setIcon(QIcon('pictures/back.jpg'))
-        current_button.setIcon(QIcon('pictures/back.jpg'))
+        prev_button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
+        current_button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), 'pictures/back.jpg')))
 
 
     def update_server_interface(self, button, picture_path, color):
-        button.setIcon(QIcon(picture_path))
+        button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), picture_path)))
         self.update_button_color(button, color)
 
     def update_button_color(self, button, color):

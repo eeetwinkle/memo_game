@@ -39,8 +39,7 @@ class MainWindow(QMainWindow):
 
         # Ставим начальные картинки на все кнопки
         for button in self.buttons_list:
-            button.setIcon(QIcon('pictures/back.jpg'
-                                 ))
+            button.setIcon(QIcon('pictures/back.jpg'))
             button.setText('')
             button.setIconSize(QSize(button.width() - 8, button.height() - 8))
             button.clicked.connect(self.button_client_clicked)
@@ -107,7 +106,7 @@ class MainWindow(QMainWindow):
 
             data = self.client_sock.recv(1024)
             btn, picture = data.decode('utf-8').split('|')
-            button.setIcon(QIcon(picture))
+            self.update_button(button, picture, 'b')
 
             # Если ход четный, то проверяемм условие выигрышности
             if self.press_count == 0:
@@ -243,7 +242,7 @@ class MainWindow(QMainWindow):
 
     
     def update_button(self, button, picture_path, color):
-        button.setIcon(QIcon(picture_path))
+        button.setIcon(QIcon(os.path.join(os.path.dirname(__file__), picture_path)))
         self.update_button_color(button, color)
         
         
