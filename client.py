@@ -107,7 +107,6 @@ class MainWindow(QMainWindow):
             data = self.client_sock.recv(1024)
             btn, picture = data.decode('utf-8').split('|')
             self.update_button(button, picture, 'b')
-            button.setIcon(QIcon(picture))
 
             # Если ход четный, то проверяемм условие выигрышности
             if self.press_count == 0:
