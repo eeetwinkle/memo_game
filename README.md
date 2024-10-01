@@ -20,7 +20,6 @@
 
  
 ![Image alt](https://github.com/eeetwinkle/memo_game/blob/main/pictures/screenshots/screen1.png "Looking for the server..")
-![Image alt](https://github.com/eeetwinkle/memo_game/blob/main/pictures/screenshots/screen4.png "Gameplay")
 ![Image alt](https://github.com/eeetwinkle/memo_game/blob/main/pictures/screenshots/screen5.png "Gameplay")
 ![Image alt](https://github.com/eeetwinkle/memo_game/blob/main/pictures/screenshots/screen7.png "You win")
 
